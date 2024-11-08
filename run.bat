@@ -1,0 +1,1 @@
+@start "" /MIN pythonw %~dp0ncre.py
