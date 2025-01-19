@@ -16,17 +16,17 @@ sendkey = '<SENDKEY>'
 def fetch():
     '''如果今天没检查过，或上一次检查失败了，进行检查。若成功，更新检查日期。不论成功还是失败，停1小时'''
     checked_date = None
+    req = urllib.request.Request('https://ncre.neea.edu.cn/html1/category/1507/872-1.htm', headers={'User-Agent': ''})
 
     while True:
         if checked_date != date.today():
             try:
-                req = urllib.request.Request('https://ncre.neea.edu.cn/html1/category/1507/872-1.htm', headers={'User-Agent': ''})
                 with urllib.request.urlopen(req) as resp:
                     html = resp.read().decode()
                 if check_content in html:
+                    logging.warning('%s yes', time.ctime())
                     if sendkey != '<SENDKEY>':
                         urllib.request.urlopen(f'https://sctapi.ftqq.com/{sendkey}.send?title=ncre').close()
-                    logging.warning('%s yes', time.ctime())
                 else:
                     logging.info('%s ok', time.ctime())
                 checked_date = date.today()
